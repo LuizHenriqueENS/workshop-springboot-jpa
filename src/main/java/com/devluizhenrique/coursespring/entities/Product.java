@@ -1,8 +1,8 @@
 package com.devluizhenrique.coursespring.entities;
 
+
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +20,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -32,20 +31,17 @@ public class Product implements Serializable {
 	private String imgUrl;
 
 	@ManyToMany
-	@JoinTable(
-			name = "tb_product_category",
-			joinColumns = @JoinColumn(name = "product_id"),
-			inverseJoinColumns = @JoinColumn(name = "category_id"))
-	
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "id.product")
 	private Set<OrderItem> items = new HashSet<>();
 	
 	public Product() {
 	}
 
-	public Product(Long id, String name, String description, double price, String imgUrl) {
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -77,11 +73,11 @@ public class Product implements Serializable {
 		this.description = description;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
@@ -93,19 +89,25 @@ public class Product implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
 	@JsonIgnore
-	public Set<Order> getOrders(){
+	public Set<Order> getOrders() {
 		Set<Order> set = new HashSet<>();
-		
 		for (OrderItem x : items) {
 			set.add(x.getOrder());
 		}
-		
 		return set;
 	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -117,11 +119,11 @@ public class Product implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
-
-	public Set<Category> getCategories() {
-		return categories;
-	}
-
 }
