@@ -1,10 +1,12 @@
 package com.devluizhenrique.coursespring.resources;
 
+import com.devluizhenrique.coursespring.repositories.UserRepository;
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +22,14 @@ import com.devluizhenrique.coursespring.services.UserService;
 @RequestMapping(value = "/users")
 public class UserResource {
 
+	private final UserRepository userRepository;
 	@Autowired
+	
 	private UserService userService;
+
+	UserResource(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@GetMapping
 	public ResponseEntity<List<User>> finAll() {
@@ -44,5 +52,11 @@ public class UserResource {
 				.path("/{id}")
 				.buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id){
+		userService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
