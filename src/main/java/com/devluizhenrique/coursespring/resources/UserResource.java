@@ -1,6 +1,5 @@
 package com.devluizhenrique.coursespring.resources;
 
-import com.devluizhenrique.coursespring.repositories.UserRepository;
 import java.net.URI;
 import java.util.List;
 
@@ -23,14 +22,8 @@ import com.devluizhenrique.coursespring.services.UserService;
 @RequestMapping(value = "/users")
 public class UserResource {
 
-	private final UserRepository userRepository;
 	@Autowired
-	
 	private UserService userService;
-
-	UserResource(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
 
 	@GetMapping
 	public ResponseEntity<List<User>> finAll() {
